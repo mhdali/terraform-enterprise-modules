@@ -305,6 +305,7 @@ module "db" {
   kms_key_id              = "${coalesce(var.kms_key_id, join("", aws_kms_key.key.*.arn))}"
   snapshot_identifier     = "${var.db_snapshot_identifier}"
   db_name                 = "${var.db_name}"
+  ptfe_sg                 = "${module.instance.ptfe_sg}"
 }
 
 module "redis" {
