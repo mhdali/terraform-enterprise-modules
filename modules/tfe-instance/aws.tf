@@ -84,6 +84,12 @@ variable "internal_security_group_ids" {
   default     = []
 }
 
+variable "additional_internal_security_group_ids" {
+  description = "Additional security groups to attach to TFE instances, ex: ssh_sg"
+  type        = "list"
+  default     = []
+}
+
 variable "proxy_url" {
   description = "A url (http or https, with port) to proxy all external http/https request from the cluster to."
   type        = "string"
@@ -197,7 +203,7 @@ resource "aws_launch_configuration" "ptfe" {
   image_id             = "${var.ami_id}"
   instance_type        = "${var.instance_type}"
   key_name             = "${var.key_name}"
-  security_groups      = ["${concat(var.internal_security_group_ids, aws_security_group.ptfe.*.id)}"]
+  security_groups      = ["${concat(var.internal_security_group_ids, aws_security_group.ptfe.*.id, var.additional_internal_security_group_ids)}"]
   iam_instance_profile = "${aws_iam_instance_profile.tfe_instance.name}"
 
   root_block_device {
